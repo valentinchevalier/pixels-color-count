@@ -9,11 +9,14 @@
 
 <body>
   <div class="wrapper">
-    <input type="file" name="image" id="upload-image">
+    <input type="file" name="image" id="upload-image" accept="image/*">
     <div class="image-container">
       <img src="/images/placeholder.png" alt="" id="display-image">
     </div>
-    <div class="loader"></div>
+    <div class="loader-container">
+      <div class="loader"></div>
+      <span class="label">Calcul en cours...</span>
+    </div>
     <p id="size-block"></p>
     <p id="time-block"></p>
   </div>
