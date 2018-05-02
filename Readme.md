@@ -1,4 +1,5 @@
-# Atmo Occitanie - Démo
+# Pixels color count
+
 ## Install
 To install all dependencies :
 ``` sh
