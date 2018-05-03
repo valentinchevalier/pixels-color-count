@@ -22,4 +22,36 @@ export default class ColorUtils {
       a: parseInt(result[4], 16),
     } : null;
   }
+
+
+  static euclideanDistanceSquare(list1, list2) {
+    let sum = 0;
+
+    for (let i = 0; i < list1.length; i += 1) {
+      const offset = list1[i] - list2[i];
+      sum += offset * offset;
+    }
+
+    return sum;
+  }
+  static hexSimilarity(hex1, hex2) {
+    return this.rgbSimilarity(this.hexToRgba(hex1), this.hexToRgba(hex2));
+  }
+
+  static rgbSimilarity(rgb1, rgb2) {
+    if (!this.RGB_MAX_DISTANCE_SQUARE) {
+      this.RGB_MAX_DISTANCE_SQUARE = this.euclideanDistanceSquare([255, 255, 255], [0, 0, 0]);
+    }
+    const distance = this.euclideanDistanceSquare([
+      rgb1.r,
+      rgb1.g,
+      rgb1.b,
+    ], [
+      rgb2.r,
+      rgb2.g,
+      rgb2.b,
+    ]);
+
+    return 1 - Math.sqrt(distance / this.RGB_MAX_DISTANCE_SQUARE);
+  }
 }

@@ -2,31 +2,34 @@ import ColorUtils from './color-utils';
 
 export default class ImageProcessing {
   static getColorFromArray(data, startIndex) {
-    return {
+    return ColorUtils.rgbaToHex({
       r: data[startIndex],
       g: data[startIndex + 1],
       b: data[startIndex + 2],
       a: data[startIndex + 3],
-    };
+    });
   }
 
-  static countColors(imageData) {
-    const colors = {};
+  static countColors(imageData, similarityThreshold = 0.9, onProgress = () => {}) {
+    const result = [];
 
     for (let i = 0; i < imageData.length; i += 4) {
-      const hexColor = ColorUtils.rgbaToHex(this.getColorFromArray(imageData, i));
+      const hexColor = this.getColorFromArray(imageData, i);
 
-      if (colors[hexColor]) {
-        colors[hexColor] += 1;
+      const existingColor = result.find(data => ColorUtils
+        .hexSimilarity(data.color, hexColor) >= similarityThreshold);
+
+      if (!existingColor) {
+        result.push({
+          color: hexColor,
+          count: 1,
+        });
       } else {
-        colors[hexColor] = 1;
+        existingColor.count += 1;
       }
+      onProgress(i / 4);
     }
 
-    return Object.keys(colors).map(key => ({
-      color: key,
-      count: colors[key],
-    }));
+    return result;
   }
 }
-

@@ -13,12 +13,19 @@ export default class AnalysePixels {
     this.$imageContainer = document.querySelector('.image-container');
     this.$sizeBlock = document.getElementById('size-block');
     this.$canvas = document.getElementById('canvas');
+    this.$progressBar = document.getElementById('progressBar');
     this.$results = document.querySelector('.resultats');
 
     this.$form.addEventListener('submit', (submitEvent) => {
       submitEvent.preventDefault();
 
-      this.threshold = this.$inputThreshold.value ? this.$inputThreshold.value : 10;
+      this.threshold = this.$inputThreshold.value ? Math.round(this.$inputThreshold.value) : 90;
+
+      if (this.threshold < 0 || this.threshold > 100) {
+        return;
+      }
+
+      this.threshold = this.threshold / 100;
 
       this.startAnalysing();
     });
@@ -31,10 +38,18 @@ export default class AnalysePixels {
   static startLoading() {
     this.$results.innerHTML = '';
     this.$body.classList.add('is-loading');
+    this.setProgress(0);
   }
 
   static stopLoading() {
     this.$body.classList.remove('is-loading');
+    this.setProgress(0);
+  }
+
+  static setProgress(percentage) {
+    const percentString = `${percentage}%`;
+    this.$progressBar.style.width = percentString;
+    this.$progressBar.innerHTML = percentString;
   }
 
   static startAnalysing() {
@@ -47,9 +62,17 @@ export default class AnalysePixels {
     const analysePerf = new Perf('Temps de calcul');
     analysePerf.startExecution();
 
-    worker.postMessage({ imageData });
+    worker.postMessage({
+      imageData,
+      similarityThreshold: this.threshold,
+    });
 
     worker.addEventListener('message', ({ data }) => {
+      if (data.type && data.type === 'progress') {
+        this.setProgress(data.percentage);
+        return;
+      }
+
       analysePerf.stopExecution();
       analysePerf.log();
 
@@ -62,6 +85,7 @@ export default class AnalysePixels {
       displayPerf.log();
 
       this.stopLoading();
+      worker.terminate();
     });
   }
 
@@ -84,7 +108,6 @@ export default class AnalysePixels {
     const fragment = document.createDocumentFragment();
 
     const colorsToDisplay = analysedColors
-      .filter(colorElement => colorElement.count > this.threshold)
       .sort((a, b) => b.count - a.count)
       .splice(0, 1000);
 

@@ -30,9 +30,8 @@ body {
 .loader-container {
   display: none;
 
-  .loader {
-    @include loader(50px, $gray);
-    margin-bottom: 30px;
+  .progress {
+    height: 20px;
   }
 
   .is-loading & {
