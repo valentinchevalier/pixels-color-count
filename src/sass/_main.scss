@@ -27,38 +27,6 @@ body {
   padding: 0;
 }
 
-label[for="file-input"]{
-  display: block;
-  margin-bottom: 20px;
-  font-size: 5rem;
-  line-height: 1.2;
-  color: #292931;
-  font-weight: bold;
-}
-
-input[type="file"] {
-  cursor: pointer;
-
-  &::-webkit-file-upload-button {
-    background: $button-color;
-    border: 0;
-    padding: 1rem 2rem;
-    cursor: pointer;
-    color: #FFF;
-    outline: 0 none;
-  }
-
-  &::-ms-browse {
-    background: $button-color;
-    border: 0;
-    padding: 1rem 2rem;
-    cursor: pointer;
-    color: #FFF;
-    outline: 0 none;
-  }
-
-}
-
 .loader-container {
   display: none;
 
