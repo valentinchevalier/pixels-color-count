@@ -19,8 +19,9 @@
       </div>
       <div class="image-container hidden text-center">
         <img src="/images/placeholder.png" alt="" id="display-image">
-        <p class="mt-4" id="size-block"></p>
+        <div class="progress-scan"></div>
       </div>
+      <p class="mt-4 text-center" id="size-block"></p>
 
       <div class="form-group">
         <label for="threshold">Seuil de similarité</label>
@@ -30,7 +31,7 @@
             <span class="input-group-text" id="basic-addon1">%</span>
           </div>
         </div>
-        <small id="thresholdHelp" class="form-text text-muted">Permet de grouper les couleurs similaire. 100% -> toutes les couleurs. Similarité par défault: 90%</small>
+        <small id="thresholdHelp" class="form-text text-muted">Groupe les couleurs qui sont similaires à X %.</small>
       </div>
       <button type="submit" class="btn btn-primary">Lancer l'analyse</button>
     </form>
@@ -39,7 +40,7 @@
       <div class="progress mb-4">
         <div class="progress-bar" id="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
-      <span class="label">Calcul en cours...</span>
+      <span class="label">Analyse en cours...</span>
     </div>
     <p id="time-block"></p>
   </div>
