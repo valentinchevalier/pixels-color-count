@@ -27,12 +27,28 @@ body {
   padding: 0;
 }
 
+.image-container {
+  position: relative;
+
+  .progress-scan {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba($gray, 0.5);
+    transition: height 0.2s ease;
+  }
+}
+
+.progress-bar {
+  transition-duration: .2s;
+}
+
 .loader-container {
   display: none;
 
-  .loader {
-    @include loader(50px, $gray);
-    margin-bottom: 30px;
+  .progress {
+    height: 20px;
   }
 
   .is-loading & {

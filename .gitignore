@@ -6,33 +6,9 @@
 !.htpasswd
 !.eslintrc
 
-# ignore everything in the "wp-content" directory, except some directories
-wp-content/*
-!/wp-content/index.php
-!wp-content/plugins/
-!wp-content/themes/
-!wp-content/languages/
-!wp-content/uploads/
-wp-content/uploads/*
-!wp-content/uploads/.htaccess
-
-
-# Clean wordpress for security
-wp-snapshots
-license.txt
-readme.html
-wp-config-sample.php
-
-# Ignore env specific configs
-wp-config.dev.php
-wp-config.preprod.php
-wp-config.prod.php
-deploy.ini
-
 # ignore node dependency directories
 node_modules/
 /vendor
-*.lock
 
 # ignore Editor files
 *.sublime-project
