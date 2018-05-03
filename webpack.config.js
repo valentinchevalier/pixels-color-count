@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const WorkboxPlugin = require('workbox-webpack-plugin');
 const extractSASS = new ExtractTextPlugin('[name].bundle.css');
 
 const GoogleFonts = require('./webpack.google-fonts');
@@ -111,6 +111,11 @@ module.exports = {
     ],
   },
   plugins: [
+    new WorkboxPlugin.GenerateSW({
+      swDest: 'sw.js',
+      clientsClaim: true,
+      skipWaiting: true,
+    }),
     extractSASS,
   ],
   // stats: {

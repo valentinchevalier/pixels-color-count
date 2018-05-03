@@ -6,6 +6,7 @@
     "Node": true,
     "FileReader": true,
     "performance": true,
-    "self": true
+    "self": true,
+    "navigator": true
   }
 }
