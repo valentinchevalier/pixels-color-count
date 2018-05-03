@@ -1,12 +1,12 @@
-.tooltip {
+.color {
   position: relative;
 
-  &:hover .tooltip-text {
+  &:hover .color-text {
     visibility: visible;
     opacity: 1;
   }
 
-  .tooltip-text {
+  .color-text {
     $background-color: $gray;
     $text-color: $white;
     visibility: hidden;

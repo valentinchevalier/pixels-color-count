@@ -1,9 +1,5 @@
 @import 'sass/variables';
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/print";
-@import "~bootstrap/scss/reboot";
+@import '~bootstrap/scss/bootstrap';
 
 // Own imports
 @import 'sass/loader';

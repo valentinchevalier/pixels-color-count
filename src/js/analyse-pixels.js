@@ -1,126 +1,130 @@
 import Perf from './perf';
 import ColorUtils from './color-utils';
+import Worker from './analyse-picture.worker';
 
 export default class AnalysePixels {
   static init() {
-    this.displayImage = document.getElementById('display-image');
-    this.imageToAnalyse = document.getElementById('analyse-image');
-    this.canvas = document.getElementById('canvas');
-    this.body = document.querySelector('body');
-    this.timeBlock = document.getElementById('time-block');
-    this.sizeBlock = document.getElementById('size-block');
-    this.results = document.querySelector('.resultats');
-    this.fileInput = document.getElementById('upload-image');
+    this.$body = document.querySelector('body');
+    this.$form = document.getElementById('analyseForm');
+    this.$inputImage = document.getElementById('uploadImage');
+    this.$inputThreshold = document.getElementById('threshold');
+    this.$imageDisplay = document.getElementById('display-image');
+    this.$imageAnalyse = document.getElementById('analyse-image');
+    this.$imageContainer = document.querySelector('.image-container');
+    this.$sizeBlock = document.getElementById('size-block');
+    this.$canvas = document.getElementById('canvas');
+    this.$results = document.querySelector('.resultats');
 
-    this.fileInput.addEventListener('change', (evt) => {
-      this.startLoading();
-      const tgt = evt.target || window.event.srcElement;
-      const {
-        files,
-      } = tgt;
+    this.$form.addEventListener('submit', (submitEvent) => {
+      submitEvent.preventDefault();
 
-      if (FileReader && files && files.length) {
-        const fileReader = new FileReader();
+      this.threshold = this.$inputThreshold.value ? this.$inputThreshold.value : 10;
 
-        fileReader.onload = () => {
-          this.displayImage.src = fileReader.result;
-          this.imageToAnalyse.src = fileReader.result;
-        };
-        fileReader.readAsDataURL(files[0]);
+      this.startAnalysing();
+    });
 
-        this.imageToAnalyse.onload = () => {
-          this.startAnalysing();
-          this.sizeBlock.innerHTML = `Taille de l'image : ${this.imageToAnalyse.height}x${this.imageToAnalyse.width} pixels.`;
-        };
-      }
+    this.$inputImage.addEventListener('change', () => {
+      this.loadImage();
     });
   }
 
   static startLoading() {
-    this.results.innerHTML = '';
-    this.sizeBlock.innerHTML = '';
-    this.timeBlock.innerHTML = '';
-    this.body.classList.add('is-loading');
+    this.$results.innerHTML = '';
+    this.$body.classList.add('is-loading');
   }
 
   static stopLoading() {
-    this.body.classList.remove('is-loading');
+    this.$body.classList.remove('is-loading');
   }
 
   static startAnalysing() {
-    const context = this.canvas.getContext('2d');
+    this.startLoading();
+
+    const imageData = this.getImageData();
+
+    const worker = new Worker();
+
+    const analysePerf = new Perf('Temps de calcul');
+    analysePerf.startExecution();
+
+    worker.postMessage({ imageData });
+
+    worker.addEventListener('message', ({ data }) => {
+      analysePerf.stopExecution();
+      analysePerf.log();
+
+      const analysedColors = data.processedData;
+
+      const displayPerf = new Perf('Temps d\'affichage des résultats');
+      displayPerf.startExecution();
+      this.displayResults(analysedColors);
+      displayPerf.stopExecution();
+      displayPerf.log();
+
+      this.stopLoading();
+    });
+  }
+
+  static getImageData() {
+    const context = this.$canvas.getContext('2d');
     const {
       width,
       height,
-    } = this.imageToAnalyse;
+    } = this.$imageAnalyse;
 
-    this.canvas.height = height;
-    this.canvas.width = width;
+    this.$canvas.height = height;
+    this.$canvas.width = width;
 
-    context.drawImage(this.imageToAnalyse, 0, 0);
-
+    context.drawImage(this.$imageAnalyse, 0, 0);
     const imageData = context.getImageData(0, 0, width, height).data;
-
-    const analysePerf = new Perf();
-    analysePerf.startExecution();
-    const analysedColors = this.countColors(imageData);
-    analysePerf.stopExecution();
-
-    this.timeBlock.innerHTML = `Temps de calcul : ${analysePerf.getExecutionDuration()} secondes.`;
-    console.info(`Temps de calcul : ${analysePerf.getExecutionDuration()} secondes.`);
-
-    const displayPerf = new Perf();
-    displayPerf.startExecution();
-    this.displayResults(analysedColors);
-    displayPerf.stopExecution();
-
-    console.info(`Temps d'affichage des résultats : ${displayPerf.getExecutionDuration()} secondes.`);
-    this.stopLoading();
+    return imageData;
   }
 
   static displayResults(analysedColors) {
     const fragment = document.createDocumentFragment();
 
     const colorsToDisplay = analysedColors
+      .filter(colorElement => colorElement.count > this.threshold)
       .sort((a, b) => b.count - a.count)
       .splice(0, 1000);
 
     colorsToDisplay.forEach((colorData) => {
       const cssColor = ColorUtils.rgbaToCSS(ColorUtils.hexToRgba(colorData.color));
       const li = document.createElement('li');
-      li.innerHTML = `<span class="color tooltip" style="background: ${cssColor};"><span class="tooltip-text">${cssColor}</span></span> ${colorData.count}`;
+      li.innerHTML = `<span class="color" style="background: ${cssColor};"><span class="color-text">${cssColor}</span></span> ${colorData.count}`;
 
       fragment.appendChild(li);
     });
 
-    this.results.appendChild(fragment);
+    this.$results.appendChild(fragment);
   }
 
-  static countColors(imageData) {
-    const colors = {};
+  static loadImage() {
+    const {
+      files,
+    } = this.$inputImage;
 
-    for (let i = 0; i < imageData.length; i += 4) {
-      const hexColor = ColorUtils.rgbaToHex(this.getColorFromArray(imageData, i));
+    if (FileReader && files && files.length) {
+      const fileReader = new FileReader();
 
-      if (colors[hexColor]) {
-        colors[hexColor] += 1;
-      } else {
-        colors[hexColor] = 1;
-      }
+      fileReader.onload = () => {
+        this.$imageDisplay.src = fileReader.result;
+        this.$imageAnalyse.src = fileReader.result;
+      };
+      fileReader.readAsDataURL(files[0]);
+
+      this.$imageAnalyse.onload = () => {
+        this.displayImage();
+        this.displayImageSize();
+      };
     }
-
-    return Object.keys(colors).map(key => ({
-      color: key,
-      count: colors[key],
-    }));
   }
 
-  static getColorFromArray(data, startIndex) {
-    return {
-      r: data[startIndex],
-      g: data[startIndex + 1],
-      b: data[startIndex + 2],
-      a: data[startIndex + 3],
-    };
+  static displayImage() {
+    this.$imageContainer.classList.remove('hidden');
+  }
+
+  static displayImageSize() {
+    this.$sizeBlock.innerHTML = `Taille de l'image : ${this.$imageAnalyse.height}x${this.$imageAnalyse.width} pixels.`;
   }
 }

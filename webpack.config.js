@@ -2,9 +2,11 @@ const path = require('path');
 const GoogleFontsPlugin = require('google-fonts-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const extractSASS = new ExtractTextPlugin('[name].bundle.css');
 
 const GoogleFonts = require('./webpack.google-fonts');
 
@@ -38,30 +40,31 @@ module.exports = {
         },
       },
       {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
+      },
+      {
         test: /\.(scss|css)$/,
-        use: [{
-            loader: MiniCssExtractPlugin.loader
-          },
-          {
-            loader: "css-loader",
+        use: extractSASS.extract({
+          fallback: 'style-loader',
+          use: [{
+            loader: 'css-loader',
             options: {
               sourceMap: true,
-              minimize: {
-                safe: true
-              }
-            }
+              minimize: true,
+            },
           }, {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
               sourceMap: true,
             },
           }, {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
               sourceMap: true,
-            }
-          }
-        ]
+            },
+          }],
+        }),
       },
       {
         test: /\.font\.js$/,
@@ -108,12 +111,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      filename: "[name].bundle.css",
-      chunkFilename: "[id].css"
-    })
+    extractSASS,
   ],
   // stats: {
   //   assets: false,

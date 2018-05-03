@@ -5,6 +5,7 @@
     "document": true,
     "Node": true,
     "FileReader": true,
-    "performance": true
+    "performance": true,
+    "self": true
   }
 }

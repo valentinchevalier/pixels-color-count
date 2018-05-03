@@ -5,7 +5,6 @@ html {
 body {
   // background-color: $brand-primary;
   display: inherit;
-  font-size: 1.2rem;
   line-height: 1.5;
   font-family: sans-serif;
   margin: 0;
@@ -30,14 +29,19 @@ body {
 .wrapper {
   max-width: 500px;
   margin: 50px auto;
-  text-align: center;
+  // text-align: center;
 }
 
 .image-container {
-  margin: 50px 0;
+  margin: 30px 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+
+  &.hidden {
+    display: none;
+  }
 
   #display-image {
     max-width: 100%;
