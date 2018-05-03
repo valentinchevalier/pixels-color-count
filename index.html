@@ -9,22 +9,39 @@
 
 <body>
   <div class="wrapper">
-    <input type="file" name="image" id="upload-image" accept="image/*">
-    <div class="image-container">
-      <img src="/images/placeholder.png" alt="" id="display-image">
-    </div>
-    <div class="loader-container">
+    <form id="analyseForm">
+      <div class="form-group">
+        <div class="custom-file">
+          <input type="file" name="upload-image" id="uploadImage" accept="image/*" class="custom-file-input">
+          <label class="custom-file-label" for="uploadImage">Choisissez une image...</label>
+        </div>
+      </div>
+      <div class="image-container hidden text-center">
+        <img src="/images/placeholder.png" alt="" id="display-image">
+        <p class="mt-4" id="size-block"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="threshold">Seuil d'affichage des résultats</label>
+        <input type="number" class="form-control" id="threshold" aria-describedby="thresholdHelp" placeholder="Seuil d'affichage des résultats">
+        <small id="thresholdHelp" class="form-text text-muted">Seuls les couleurs ayant plus de pixels que le seuil seront affichées. Seuil par défault: 10</small>
+      </div>
+      <button type="submit" class="btn btn-primary">Lancer l'analyse</button>
+    </form>
+
+    <div class="loader-container text-center">
       <div class="loader"></div>
       <span class="label">Calcul en cours...</span>
     </div>
-    <p id="size-block"></p>
     <p id="time-block"></p>
   </div>
 
-  <img src="" alt="" id="analyse-image">
-  <canvas id="canvas"></canvas>
-
   <ul class="resultats"></ul>
+
+  <div class="analyse-container">
+    <img src="" alt="" id="analyse-image">
+    <canvas id="canvas"></canvas>
+  </div>
 
   <script src="app.bundle.js"></script>
 </body>
