@@ -14,6 +14,7 @@ export default class AnalysePixels {
     this.$sizeBlock = document.getElementById('size-block');
     this.$canvas = document.getElementById('canvas');
     this.$progressBar = document.getElementById('progressBar');
+    this.$progressScan = document.querySelector('.progress-scan');
     this.$results = document.querySelector('.resultats');
 
     this.$form.addEventListener('submit', (submitEvent) => {
@@ -50,6 +51,7 @@ export default class AnalysePixels {
     const percentString = `${percentage}%`;
     this.$progressBar.style.width = percentString;
     this.$progressBar.innerHTML = percentString;
+    this.$progressScan.style.height = percentString;
   }
 
   static startAnalysing() {
