@@ -1,0 +1,24 @@
+{
+  "name": "pixels color count",
+  "short_name": "count pixels",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fff",
+  "theme_color": "#000",
+  "description": "App d'analyse de couleurs par pixels",
+  "dir": "ltr",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "images/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "images/android-chrome-256x256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ]
+}

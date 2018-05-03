@@ -5,6 +5,14 @@
   <meta charset="UTF-8">
   <title>Analyse Pixels</title>
   <link rel="stylesheet" href="app.bundle.css" type="text/css" media="all">
+  <link rel="manifest" href="/manifest.json">
+  <script async>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/dist/sw.js');
+      });
+    }
+  </script>
 </head>
 
 <body>
