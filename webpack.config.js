@@ -1,14 +1,11 @@
 const path = require('path');
-const GoogleFontsPlugin = require('google-fonts-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const extractSASS = new ExtractTextPlugin('[name].bundle.css');
 
-const GoogleFonts = require('./webpack.google-fonts');
+const extractSASS = new ExtractTextPlugin('[name].bundle.css');
 
 module.exports = {
   entry: {
@@ -23,7 +20,8 @@ module.exports = {
     contentBase: path.resolve(__dirname, 'dist'),
   },
   module: {
-    rules: [{
+    rules: [
+      {
         enforce: 'pre',
         test: /\.js$/,
         loader: 'eslint-loader',
@@ -114,12 +112,25 @@ module.exports = {
     new WorkboxPlugin.GenerateSW({
       swDest: 'sw.js',
       clientsClaim: true,
-      skipWaiting: true,
+      skipWaiting: true
     }),
     extractSASS,
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+    }),
+    new WebpackPwaManifest({
+      name: 'Pixel colors count',
+      short_name: 'Colors count',
+      theme_color: '#000000',
+      background_color: '#ffffff',
+      description: 'App d\'analyse des couleurs d\'une image',
+      icons: [
+        {
+          src: path.resolve('src/assets/icon.png'),
+          sizes: [96, 128, 192, 256, 384, 512],
+          destination: 'icons'
+        }
+      ]
+    })
   ],
-  // stats: {
-  //   assets: false,
-  //   children: false,
-  // },
 };
