@@ -116,7 +116,7 @@ export default class AnalysePixels {
     colorsToDisplay.forEach((colorData) => {
       const cssColor = ColorUtils.rgbaToCSS(ColorUtils.hexToRgba(colorData.color));
       const li = document.createElement('li');
-      li.innerHTML = `<span class="color" style="background: ${cssColor};"><span class="color-text">${cssColor}</span></span> ${colorData.count}`;
+      li.innerHTML = `<div class="color-container"><span class="color" style="background-color: ${cssColor};"></span><span class="color-text">${cssColor}</span></div> ${colorData.count}`;
 
       fragment.appendChild(li);
     });

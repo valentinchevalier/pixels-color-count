@@ -1,6 +1,7 @@
 export default class ColorUtils {
   static rgbaToCSS(rgbaColor) {
-    return `rgba(${rgbaColor.r}, ${rgbaColor.g}, ${rgbaColor.b}, ${rgbaColor.a})`;
+    const alpha = rgbaColor.a / 255;
+    return `rgba(${rgbaColor.r}, ${rgbaColor.g}, ${rgbaColor.b}, ${alpha.toFixed(2)})`;
   }
 
   static rgbaToHex(rgbaColor) {
@@ -23,7 +24,6 @@ export default class ColorUtils {
     } : null;
   }
 
-
   static euclideanDistanceSquare(list1, list2) {
     let sum = 0;
 
@@ -34,22 +34,26 @@ export default class ColorUtils {
 
     return sum;
   }
+
   static hexSimilarity(hex1, hex2) {
     return this.rgbSimilarity(this.hexToRgba(hex1), this.hexToRgba(hex2));
   }
 
   static rgbSimilarity(rgb1, rgb2) {
     if (!this.RGB_MAX_DISTANCE_SQUARE) {
-      this.RGB_MAX_DISTANCE_SQUARE = this.euclideanDistanceSquare([255, 255, 255], [0, 0, 0]);
+      this.RGB_MAX_DISTANCE_SQUARE =
+        this.euclideanDistanceSquare([255, 255, 255, 255], [0, 0, 0, 0]);
     }
     const distance = this.euclideanDistanceSquare([
       rgb1.r,
       rgb1.g,
       rgb1.b,
+      rgb1.a,
     ], [
       rgb2.r,
       rgb2.g,
       rgb2.b,
+      rgb2.a,
     ]);
 
     return 1 - Math.sqrt(distance / this.RGB_MAX_DISTANCE_SQUARE);

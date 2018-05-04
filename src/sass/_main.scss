@@ -75,7 +75,7 @@ body {
   #display-image {
     max-width: 100%;
     height: auto;
-    border: 2px solid $gray;
+    border: 1px solid rgba($gray, 0.2);
     margin: 0 auto;
   }
 }
@@ -101,11 +101,63 @@ body {
     margin: 0 10px 10px 0;
   }
 
-  .color {
-    height: $color-size;
-    width: $color-size;
-    display: inline-block;
+  .color-container {
+    position: relative;
+    z-index: 1;
     margin-right: 10px;
     border: 1px solid rgba($gray, 0.2);
+
+    &::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      display: block;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-image: url('./assets/bg-color.jpg');
+    }
+
+    .color {
+      height: $color-size;
+      width: $color-size;
+      display: block;
+    }
+
+    &:hover .color-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .color-text {
+      $background-color: $gray;
+      $text-color: $white;
+      visibility: hidden;
+      width: 160px;
+      background-color: $background-color;
+      color: $text-color;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity $transition-duration ease;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: $background-color transparent transparent transparent;
+      }
+    }
   }
 }

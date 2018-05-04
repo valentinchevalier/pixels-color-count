@@ -2,6 +2,7 @@ export default class Perf {
   constructor(performance = 'Performance') {
     this.performance = performance;
   }
+
   startExecution() {
     this.startTime = performance.now();
   }
