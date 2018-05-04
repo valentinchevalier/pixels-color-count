@@ -1,0 +1,42 @@
+{
+  "icons": [
+    {
+      "src": "icons/icon_512x512.4bcb8a7ce7abc178e6318a3833a19634.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon_384x384.4e6df0d6c66e90c3d6f1e67087f24549.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon_256x256.77f18dbbfc2e0a0190370336dd034c55.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon_192x192.5f1b0d68cda6f21fa6b8c91855a60dcc.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon_128x128.24e0b0eba7c791a1e2bd4977ea164371.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon_96x96.fb23701758ec30279ad1ac3f1cdf5b8c.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "Pixel colors count",
+  "short_name": "Colors count",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "description": "App d'analyse des couleurs d'une image"
+}
